@@ -1,37 +1,12 @@
 pipeline {
-    agent any
-    environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
-        DOCKER_IMAGE = "myjenkinsagent:latest"
-    }
+    agent { dockerfile true}
     stages {
-        stage('Checkout') {
+        stage('Test) {
             steps {
-                git url: "https://github.com/${env.REPO_OWNER}/${env.REPO_NAME}.git", credentialsId: 'github-token', branch: 'main'
+                sh '''
+                    python3 --version
+                '''
             }
-        }
-        stage('Build Docker Image') {
-            steps {
-                dir('dynamic_agent') {
-                    sh 'docker build -t ${DOCKER_IMAGE} .'
-                }
-            }
-        }
-        stage('Login to Docker Hub') {
-            steps {
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-            }
-        }
-        stage('Push to Docker Hub') {
-            steps {
-                sh 'docker push ${DOCKER_IMAGE}'
-            }
-        }
-    }
-    post {
-        always {
-            sh 'docker logout'
-            cleanWs()
         }
     }
 }
