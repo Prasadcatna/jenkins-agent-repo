@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Build Docker Image') {
             steps {
-                node('any') {  // or 'any' if you want to use any available agent
+                node('built-in') {  // or 'any' if you want to use any available agent
                     // Build the Docker image and tag it with 'latest'
                     sh 'docker build -t my-python-agent:latest .'
                 }
