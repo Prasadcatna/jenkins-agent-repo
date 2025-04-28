@@ -3,7 +3,6 @@ pipeline {
         docker {
             image 'my-python-agent:latest'  // Use the image built in the previous pipeline
             label 'built-in'  // If using the master node (replace with appropriate label if needed)
-            args '-u jenkins'  // If needed, set additional Docker args
         }
     }
     stages {
