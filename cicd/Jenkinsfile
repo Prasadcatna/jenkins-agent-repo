@@ -1,14 +1,13 @@
 pipeline {
-     agent none  // No agent is used in the pipeline
-     stages {
-         stage('Build Docker Image') {
-             steps {
-                 node('any') {  // or 'any' if you want to use any available agent
-                 node('built-in') {  // or 'any' if you want to use any available agent
-                     // Build the Docker image and tag it with 'latest'
-                     sh 'docker build -t my-python-agent:latest .'
-                 }
-             }
-         }
-     }
- }
+    agent none
+
+    stages {
+        stage('Build Docker Image') {
+            agent { label 'any' }  // Assign an agent for this specific stage
+            steps {
+                // Build the Docker image and tag it with 'latest'
+                sh 'docker build -t my-python-agent:latest .'
+            }
+        }
+    }
+}
