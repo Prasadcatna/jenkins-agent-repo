@@ -1,12 +1,44 @@
 pipeline {
-    agent none  // No agent is used in the pipeline
+    agent none
     stages {
         stage('Build Docker Image') {
+            agent {
+                label 'built-in'
+            }
             steps {
-                node('built-in') {  // or 'any' if you want to use any available agent
-                    // Build the Docker image and tag it with 'latest'
-                    sh 'docker build -t my-python-agent:latest .'
-                }
+                checkout scm
+                sh 'docker build -t my-python-agent:latest .'
+            }
+        }
+        stage('Checkout') {
+            agent {
+                label 'custom-docker-agent'
+            }
+            steps {
+                checkout scm
+            }
+        }
+        stage('Build') {
+            agent {
+                label 'custom-docker-agent'
+            }
+            steps {
+                sh 'python --version'
+            }
+        }
+        stage('Test') {
+            agent {
+                label 'custom-docker-agent'
+            }
+            steps {
+                sh 'pytest tests/'
+            }
+        }
+    }
+    post {
+        always {
+            node('built-in') {
+                cleanWs()
             }
         }
     }
