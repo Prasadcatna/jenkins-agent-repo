@@ -5,14 +5,16 @@ pipeline {
             label 'built-in'  // If using the master node (replace with appropriate label if needed)
         }
     }
-    stage('Clone Repo') {
+
+    stages {
+        stage('Clone Repo') {
             steps {
                 echo 'Cloning repository...'
                 // Normally Jenkins does this automatically when using SCM. This is illustrative.
                 checkout scm
             }
         }
-    stages {
+
         stage('Test') {
             steps {
                 sh 'python3 --version'  // Example test with python version
