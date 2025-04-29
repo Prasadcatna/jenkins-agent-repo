@@ -15,6 +15,14 @@ pipeline {
             }
         }
 
+        stage('Run App'){
+            steps {
+                sh '''
+                    python3 app.py
+                '''
+            }
+        }
+
         stage('Test') {
             steps {
                 sh 'python3 --version'  // Example test with python version
